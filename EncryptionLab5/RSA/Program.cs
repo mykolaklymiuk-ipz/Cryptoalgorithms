@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RSA;
 
@@ -35,10 +36,23 @@ class Program
         var text = "some text";
 
         System.Console.WriteLine($"text: '{text}'");
+        System.Console.WriteLine($"e: '{keys[0]}'");
+        System.Console.WriteLine($"d: '{keys[1]}'");
+        System.Console.WriteLine($"n: '{keys[2]}'");
+        
         var encrypted = EncryptMessage(text, keys[0], keys[2]);
 
+        var rsa = string.Join(" ", encrypted.Select(PrintBigIntegerAsHex));
+        
+        System.Console.WriteLine($"Encrypted RSA: '{rsa}'");
+        
         var decrypted = DecryptMessage(encrypted, keys[1], keys[2]);
         System.Console.WriteLine($"decrypted message: '{decrypted}'");
+    }
+
+    private static string PrintBigIntegerAsHex(BigInteger s)
+    {
+        return string.Join("", s.ToByteArray().Select(b => b.ToString("x2")));
     }
 }
 
